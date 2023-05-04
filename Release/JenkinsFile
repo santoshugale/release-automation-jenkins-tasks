@@ -1,0 +1,67 @@
+/* Requires the Docker Pipeline plugin */
+pipeline {
+    agent any
+
+    stages {
+        stage('Setup parameters') {
+            steps {
+                script {
+                    properties([
+                        parameters([
+                            choice(
+                                choices: ['dev1', 'dev2', 'qa', 'peg', 'stg2', 'stg', 'prod2', 'prod'],
+                                name: 'ENVIRONMENT'
+                            ),
+                            string(
+                                defaultValue: '23.2.0',
+                                name: 'RELEASE'
+                            ),
+                            string(
+                                defaultValue: 'Day1Pre',
+                                name: 'STEPNAME'
+                            )
+                        ])
+                    ])
+                }
+            }
+        }
+        stage('Log Parameters') {
+            steps {
+                echo 'Environment = ' + params.ENVIRONMENT + '; Release = ' + params.RELEASE + '; Step Name = ' + params.STEPNAME
+            }
+        }
+        stage('Validation') {
+            steps {
+                script {
+                    def directory = "./Release/" + params.RELEASE + "/" + params.STEPNAME + "/Dockerfile"
+                    if (fileExists(directory)) {
+                        echo "Dockerfile exists in " + directory
+                    }
+                    else {
+                        echo "directory or Dockerfile does not exist in " + directory
+                        currentBuild.result = 'FAILURE'
+                        error("Stopping early!")
+                    }
+                }
+            }
+        }
+        stage('Build Docker') {
+            steps {
+                dir('./Release/' + params.RELEASE + '/' + params.STEPNAME + '/') {
+                    sh("""
+                        docker build -f ./Dockerfile . -t velo-release-tasks
+                    """)
+                }
+            }
+        }
+        stage('Run Docker') {
+            steps {
+                dir('./Release/' + params.RELEASE + '/' + params.STEPNAME + '/') {
+                    sh("""
+                        docker run --name "velo-release-tasks" --env ENVIRONMENT=${params.ENVIRONMENT}
+                    """)
+                }
+            }
+        }
+    }
+}
