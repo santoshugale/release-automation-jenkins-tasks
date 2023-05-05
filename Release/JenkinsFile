@@ -33,7 +33,7 @@ pipeline {
         stage('Validation') {
             steps {
                 script {
-                    def directory = "./Release/" + params.RELEASE + "/" + params.STEPNAME
+                    def directory = "./Release/" + params.RELEASE + "/" + params.STEPNAME + "/"
                     if (fileExists(directory)) {
                         echo "Dockerfile exists in " + directory
                     }
