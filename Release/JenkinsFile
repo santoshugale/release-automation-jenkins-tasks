@@ -11,13 +11,14 @@ pipeline {
                             choice(
                                 choices: ['dev1', 'dev2', 'qa', 'peg', 'stg2', 'stg', 'prod2', 'prod'],
                                 name: 'ENVIRONMENT'
+                                defaultValue: 'dev2'
                             ),
                             string(
-                                defaultValue: '23.2.0',
+                                defaultValue: '23.3.0',
                                 name: 'RELEASE'
                             ),
                             string(
-                                defaultValue: 'Day1Pre',
+                                defaultValue: 'TwilioUrlUpdate',
                                 name: 'STEPNAME'
                             )
                         ])
@@ -28,12 +29,14 @@ pipeline {
         stage('Log Parameters') {
             steps {
                 echo 'Environment = ' + params.ENVIRONMENT + '; Release = ' + params.RELEASE + '; Step Name = ' + params.STEPNAME
+                echo ${WORKSPACE}
+                echo pwd()
             }
         }
         stage('Validation') {
             steps {
                 script {
-                    def directory = "./Release/" + params.RELEASE + "/" + params.STEPNAME + "/"
+                    def directory = "./" + params.RELEASE + "/" + params.STEPNAME + "/"
                     if (fileExists(directory)) {
                         echo "Dockerfile exists in " + directory
                     }
