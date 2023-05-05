@@ -34,7 +34,7 @@ pipeline {
         stage('Validation') {
             steps {
                 script {
-                    def directory = ".\Release\" + params.RELEASE + "\" + params.STEPNAME + "\"
+                    def directory = "${WORKSPACE}/Release/" + params.RELEASE + "/" + params.STEPNAME + "/"
                     if (fileExists(directory)) {
                         echo "Dockerfile exists in " + directory
                     }
@@ -48,7 +48,7 @@ pipeline {
         }
         stage('Build Docker') {
             steps {
-                dir('.\Release\' + params.RELEASE + '\' + params.STEPNAME + '\') {
+                dir('${WORKSPACE}/Release/' + params.RELEASE + '/' + params.STEPNAME + '/') {
                     sh("""
                         docker build -f ./Dockerfile . -t velo-release-tasks
                     """)
@@ -57,7 +57,7 @@ pipeline {
         }
         stage('Run Docker') {
             steps {
-                dir('.\Release\' + params.RELEASE + '\' + params.STEPNAME + '\') {
+                dir('${WORKSPACE}/Release/' + params.RELEASE + '/' + params.STEPNAME + '/') {
                     sh("""
                         docker run "velo-release-tasks" --env ENVIRONMENT=${params.ENVIRONMENT}
                     """)
