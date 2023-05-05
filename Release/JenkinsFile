@@ -29,8 +29,8 @@ pipeline {
         stage('Log Parameters') {
             steps {
                 echo 'Environment = ' + params.ENVIRONMENT + '; Release = ' + params.RELEASE + '; Step Name = ' + params.STEPNAME
-                echo ${WORKSPACE}
-                echo pwd()
+                echo "${WORKSPACE}"
+                echo "pwd()"
             }
         }
         stage('Validation') {
