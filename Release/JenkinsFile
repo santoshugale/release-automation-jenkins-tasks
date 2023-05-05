@@ -49,16 +49,14 @@ pipeline {
         stage('Build Docker') {
             steps {
                 dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
-                    echo "${WORKSPACE}"
-                    sh(""" docker build -f Dockerfile . -t velo-release-tasks""")
+                    sh("""docker build -f Dockerfile . -t velo-release-tasks""")
                 }
             }
         }
         stage('Run Docker') {
             steps {
                 dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
-                    echo "${WORKSPACE}"
-                    sh(""" docker run "velo-release-tasks" --env ENVIRONMENT=${params.ENVIRONMENT}""")
+                    sh("""docker run "velo-release-tasks" --env ENVIRONMENT=${params.ENVIRONMENT}""")
                 }
             }
         }
