@@ -10,7 +10,7 @@ pipeline {
                         parameters([
                             choice(
                                 choices: ['dev1', 'dev2', 'qa', 'peg', 'stg2', 'stg', 'prod2', 'prod'],
-                                name: 'ENVIRONMENT'
+                                name: 'ENVIRONMENT',
                                 defaultValue: 'dev2'
                             ),
                             string(
