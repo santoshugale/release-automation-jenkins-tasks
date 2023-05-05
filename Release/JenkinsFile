@@ -49,7 +49,7 @@ pipeline {
         stage('Build Docker') {
             steps {
                 dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
-                    sh("""docker build -f Dockerfile . -t velo-release-tasks""")
+                    sh("""docker build -f ./Dockerfile . -t velo-release-tasks""")
                 }
             }
         }
