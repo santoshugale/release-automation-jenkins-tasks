@@ -37,6 +37,8 @@ pipeline {
                     def directory = "${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME + "\\Dockerfile"
                     if (fileExists(directory)) {
                         echo "Dockerfile exists in " + directory
+                        def readContent = directory
+                        echo readContent
                     }
                     else {
                         echo "directory or Dockerfile does not exist in " + directory
