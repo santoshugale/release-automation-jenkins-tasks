@@ -56,7 +56,7 @@ pipeline {
         stage('Run Docker') {
             steps {
                 dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
-                    bat "docker run \"velo-release-tasks\"
+                    bat "docker run \"velo-release-tasks\""
                 }
             }
         }
