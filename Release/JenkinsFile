@@ -61,7 +61,7 @@ pipeline {
         }
         stage('Clean Docker') {
             steps {
-                if (bat(script:"docker images -q \"velo-release-tasks\" 2>/dev/null", returnStdout:true)) {
+                if (bat(script:"docker images -q velo-release-tasks 2>/dev/null", returnStdout:true)) {
                     def stdout = bat(script:"docker image rm \"velo-release-tasks\" 2>&1", returnStdout:true)
                     echo "Local docker image cleanup output: ${stdout}"
                 } else {
