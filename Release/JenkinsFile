@@ -63,7 +63,7 @@ pipeline {
             steps {
 		script {
 			if (bat(script:"docker images -q \"velo-release-tasks\" 2> \$null", returnStdout:true)) {
-				def stdout = bat(script:"docker image rm \"velo-release-tasks\" 2>&1", returnStdout:true)
+				def stdout = bat(script:"docker image rm \"velo-release-tasks\" --force 2>&1", returnStdout:true)
 				echo "Local docker image cleanup output: ${stdout}"
 			} else {
 				echo "Image not found: velo-release-tasks"
