@@ -1,3 +1,5 @@
+def tempImageName = "release_automation_task_${UUID.randomUUID()}"
+echo tempImageName
 pipeline {
     agent any
 
