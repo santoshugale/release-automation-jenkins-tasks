@@ -1,0 +1,3 @@
+FROM python:latest
+COPY LeadImport.py ./
+CMD [ "python", "./LeadImport.py"]
