@@ -56,7 +56,7 @@ pipeline {
         stage('Run Docker') {
             steps {
                 dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
-                    bat "docker run \"${tempImageName}\"" params.ENVIRONMENT
+                    bat "docker run \"${tempImageName}\" params.ENVIRONMENT"
                 }
             }
         }
