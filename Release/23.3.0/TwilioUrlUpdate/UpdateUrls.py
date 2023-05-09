@@ -1,4 +1,6 @@
 import csv
+import sys
+print("Environment:", sys.argv[1])
 with open("ClientList.csv") as clientList:
   reader_obj = csv.reader(clientList)
   for row in reader_obj:
