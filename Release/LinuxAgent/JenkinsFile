@@ -1,0 +1,76 @@
+def tempImageName = "release_automation_task_${UUID.randomUUID()}"
+pipeline {
+    agent any
+
+    stages {
+        stage('Setup parameters') {
+            steps {
+                script {
+                    properties([
+                        parameters([
+                            choice(
+                                choices: ['dev1', 'dev2', 'qa', 'peg', 'stg2', 'stg', 'prod2', 'prod'],
+                                name: 'ENVIRONMENT'
+                            ),
+                            string(
+                                defaultValue: '23.3.0',
+                                name: 'RELEASE'
+                            ),
+                            string(
+                                defaultValue: 'TwilioUrlUpdate',
+                                name: 'STEPNAME'
+                            )
+                        ])
+                    ])
+                }
+            }
+        }
+        stage('Log Parameters') {
+            steps {
+                echo 'Environment = ' + params.ENVIRONMENT + '; Release = ' + params.RELEASE + '; Step Name = ' + params.STEPNAME
+                echo "PWD - ${WORKSPACE}"
+            }
+        }
+        stage('Validation') {
+            steps {
+                script {
+                    def filePath = "${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME + "\\Dockerfile"
+                    if (fileExists(filePath)) {
+                        echo "Dockerfile exists in " + filePath
+                    }
+                    else {
+                        echo "directory or Dockerfile does not exist in " + directory
+                        currentBuild.result = 'FAILURE'
+                        error("Stopping early!")
+                    }
+                }
+            }
+        }
+        stage('Build Docker') {
+            steps {
+                dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
+                   sh "docker build . -t \"${tempImageName}\""
+                }
+            }
+        }
+        stage('Run Docker') {
+            steps {
+                dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
+                    sh "docker run \"${tempImageName}\" ${params.ENVIRONMENT}"
+                }
+            }
+        }
+        stage('Clean Docker') {
+            steps {
+		script {
+			if (sh(script:"docker images -q \"${tempImageName}\" 2> \$null", returnStdout:true)) {
+				def stdout = sh(script:"docker image rm \"${tempImageName}\" --force 2>&1", returnStdout:true)
+				echo "Local docker image cleanup output: ${stdout}"
+			} else {
+				echo "Image not found: \"${tempImageName}\""
+			}
+		}
+	    }
+        }
+    }
+}
