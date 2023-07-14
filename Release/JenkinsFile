@@ -34,7 +34,7 @@ pipeline {
         stage('Validation') {
             steps {
                 script {
-                    def filePath = "${WORKSPACE}/Release/" + params.RELEASE + "/" + params.STEPNAME + "/Dockerfile"
+                    def filePath = "${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME + "\\Dockerfile"
                     if (fileExists(filePath)) {
                         echo "Dockerfile exists in " + filePath
                     }
@@ -48,14 +48,14 @@ pipeline {
         }
         stage('Build Docker') {
             steps {
-                dir("${WORKSPACE}/Release/" + params.RELEASE + "/" + params.STEPNAME) {
+                dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
                    sh "sudo docker build . -t \"${tempImageName}\""
                 }
             }
         }
         stage('Run Docker') {
             steps {
-                dir("${WORKSPACE}/Release/" + params.RELEASE + "/" + params.STEPNAME) {
+                dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
                     sh "sudo docker run \"${tempImageName}\" ${params.ENVIRONMENT}"
                 }
             }
