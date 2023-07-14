@@ -63,7 +63,7 @@ pipeline {
         stage('Clean Docker') {
             steps {
 		script {
-			if (bat(script:"sudo docker images -q \"${tempImageName}\" 2>/dev/null", returnStdout:true)) {
+			if (bat(script:"sudo docker images -q \"${tempImageName}\" 2>\$null", returnStdout:true)) {
 				def stdout = bat(script:"docker image rm \"${tempImageName}\" --force 2>&1", returnStdout:true)
 				echo "Local docker image cleanup output: ${stdout}"
 			} else {
