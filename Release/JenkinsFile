@@ -17,7 +17,7 @@ pipeline {
                                 name: 'RELEASE'
                             ),
                             string(
-                                defaultValue: 'TwilioUrlUpdate',
+                                defaultValue: 'RMQQueuesDelete',
                                 name: 'STEPNAME'
                             )
                         ])
