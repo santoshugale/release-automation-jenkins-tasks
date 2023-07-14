@@ -8,7 +8,7 @@ def run(cmd):
     return subprocess.check_output(shlex.split(cmd))
 
 def get_queues():
-    with open("queue-list.csv") as queueList:
+    with open("QueuesList.csv") as queueList:
         reader_obj = csv.reader(queueList)
         for row in reader_obj:
             yield row[0]
