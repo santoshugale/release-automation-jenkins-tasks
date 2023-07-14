@@ -49,22 +49,22 @@ pipeline {
         stage('Build Docker') {
             steps {
                 dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
-                   sh "sudo docker build . -t \"${tempImageName}\""
+                   bat "docker build . -t \"${tempImageName}\""
                 }
             }
         }
         stage('Run Docker') {
             steps {
                 dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
-                    sh "sudo docker run \"${tempImageName}\" ${params.ENVIRONMENT}"
+                    bat "docker run \"${tempImageName}\" ${params.ENVIRONMENT}"
                 }
             }
         }
         stage('Clean Docker') {
             steps {
 		script {
-			if (sh(script:"sudo docker images -q \"${tempImageName}\" 2>/dev/null", returnStdout:true)) {
-				def stdout = sh(script:"sudo docker image rm \"${tempImageName}\" --force 2>&1", returnStdout:true)
+			if (bat(script:"sudo docker images -q \"${tempImageName}\" 2>/dev/null", returnStdout:true)) {
+				def stdout = bat(script:"docker image rm \"${tempImageName}\" --force 2>&1", returnStdout:true)
 				echo "Local docker image cleanup output: ${stdout}"
 			} else {
 				echo "Image not found: \"${tempImageName}\""
