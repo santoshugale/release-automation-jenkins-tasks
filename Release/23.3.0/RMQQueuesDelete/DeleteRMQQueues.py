@@ -32,10 +32,10 @@ def delete_queues():
 
 def main():
     try:
-       print("Queues Deletion Started")
        delete_queues()
-       print("Queues Deletion Completed")
     except Exception as ex:
         print(ex)
 
+print("Queues Deletion Started")
 main()
+print("Queues Deletion Completed")
