@@ -1,4 +1,4 @@
 FROM python:latest
-COPY UpdateUrls.py ./
-COPY ClientList.csv ./
-ENTRYPOINT ["python", "./UpdateUrls.py"]
+COPY DeleteRMQQueues.py ./
+COPY QueuesList.csv ./
+ENTRYPOINT ["python", "./DeleteRMQQueues.py"]
