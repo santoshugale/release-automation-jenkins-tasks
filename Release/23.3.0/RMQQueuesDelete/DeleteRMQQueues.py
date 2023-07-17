@@ -4,7 +4,7 @@ import sys
 print("Environment:", sys.argv[1])
 print("Host:", sys.argv[2])
 print("User:", sys.argv[3])
-print("Password:", sys.argv[3])
+print("Password:", sys.argv[4])
 
 print("Queues Deletion Started")
 credentials = pika.PlainCredentials(sys.argv[3], sys.argv[4])
