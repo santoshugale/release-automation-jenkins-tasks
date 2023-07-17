@@ -7,8 +7,8 @@ print("User:", sys.argv[3])
 print("Password:", sys.argv[3])
 
 print("Queues Deletion Started")
-credentials = pika.PlainCredentials('guest', 'guest')
-parameters = pika.ConnectionParameters('20.85.124.141', 5672, "/", credentials)
+credentials = pika.PlainCredentials(sys.argv[3], sys.argv[4])
+parameters = pika.ConnectionParameters(sys.argv[2], 5672, "/", credentials)
 connection = pika.BlockingConnection(parameters)
 with open("QueuesList.csv") as queueList:
     reader_obj = csv.reader(queueList)
