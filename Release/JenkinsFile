@@ -8,18 +8,12 @@ pipeline {
                 script {
                     properties([
                         parameters([
-                            choice(
-                                choices: ['dev1', 'dev2', 'qa', 'peg', 'stg2', 'stg', 'prod2', 'prod'],
-                                name: 'ENVIRONMENT'
-                            ),
-                            string(
-                                defaultValue: '23.3.0',
-                                name: 'RELEASE'
-                            ),
-                            string(
-                                defaultValue: 'RMQQueuesDelete',
-                                name: 'STEPNAME'
-                            )
+                            choice(choices: ['dev1', 'dev2', 'qa', 'peg', 'stg2', 'stg', 'prod2', 'prod'], name: 'ENVIRONMENT'),
+                            string( defaultValue: '23.3.0',name: 'RELEASE'),
+                            string(defaultValue: 'RMQQueuesDelete', name: 'STEPNAME'),
+                            string(defaultValue: 'guest', name: 'RMQHOST', description: 'Enter a rabbitmq host'),
+                            string(defaultValue: 'guest', name: 'RMQUSER', description: 'Enter a rabbitmq password to delete queue'),
+                            password(defaultValue: 'guest', name: 'RMQPASSWORD', description: 'Enter a rabbitmq password to delete queue')
                         ])
                     ])
                 }
@@ -55,9 +49,16 @@ pipeline {
         }
         stage('Run Docker') {
             steps {
-                dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
-                    bat "docker run --rm \"${tempImageName}\" ${params.ENVIRONMENT}"
-                }
+               if (params.STEPNAME == 'RMQQueuesDelete') {
+			dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
+	                	bat "docker run --rm \"${tempImageName}\" ${params.ENVIRONMENT} ${params.RMQHOST} ${params.RMQUSER} ${params.RMQPASSWORD}"
+                	}
+		} else {
+			dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
+	                	bat "docker run --rm \"${tempImageName}\" ${params.ENVIRONMENT}"
+                	}
+		}
+                
             }
         }
         stage('Clean Docker') {
