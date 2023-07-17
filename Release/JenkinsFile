@@ -49,18 +49,20 @@ pipeline {
         }
         stage('Run Docker') {
             steps {
-               if (params.STEPNAME == 'RMQQueuesDelete') {
-			dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
-	                	bat "docker run --rm \"${tempImageName}\" ${params.ENVIRONMENT} ${params.RMQHOST} ${params.RMQUSER} ${params.RMQPASSWORD}"
-                	}
-		} else {
-			dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
-	                	bat "docker run --rm \"${tempImageName}\" ${params.ENVIRONMENT}"
-                	}
+		script {
+		               if (params.STEPNAME == 'RMQQueuesDelete') {
+					dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
+			                	bat "docker run --rm \"${tempImageName}\" ${params.ENVIRONMENT} ${params.RMQHOST} ${params.RMQUSER} ${params.RMQPASSWORD}"
+		                	}
+				} else {
+					dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
+			                	bat "docker run --rm \"${tempImageName}\" ${params.ENVIRONMENT}"
+		                	}
+				}
+		                
+		            }
 		}
-                
-            }
-        }
+	}
         stage('Clean Docker') {
             steps {
 		script {
