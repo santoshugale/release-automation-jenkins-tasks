@@ -1,6 +1,11 @@
 import pika
 import csv
- 
+import sys
+print("Environment:", sys.argv[1])
+print("Host:", sys.argv[2])
+print("User:", sys.argv[3])
+print("Password:", sys.argv[3])
+
 print("Queues Deletion Started")
 credentials = pika.PlainCredentials('guest', 'guest')
 parameters = pika.ConnectionParameters('20.85.124.141', 5672, "/", credentials)
