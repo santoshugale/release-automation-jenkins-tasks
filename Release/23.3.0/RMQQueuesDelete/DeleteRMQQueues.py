@@ -2,7 +2,6 @@ import pika
 import csv
 import sys
 dict = {
-        'localhost': 'localhost',
         'dev1': 'rabbitmq-nlb.io.dev1.velocify.net', 
         'dev2': 'rabbitmq-nlb.io.dev2.velocify.net',
         'qa': 'rabbitmq-nlb.io.qa.velocify.net',
