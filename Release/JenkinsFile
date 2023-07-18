@@ -51,7 +51,7 @@ pipeline {
 		       if (params.STEPNAME == 'RMQQueuesDelete') {
 				dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
 					/* Use single quote to avoid diplaying the password in jenkings output - https://www.jenkins.io/doc/book/pipeline/jenkinsfile/#string-interpolation */
-					bat 'docker run --rm \"${tempImageName}\" ${params.ENVIRONMENT} ${params.RMQPASSWORD}'
+					bat "docker run --rm \"${tempImageName}\" ${params.ENVIRONMENT} ${params.RMQPASSWORD}"
 				}
 			} else {
 				dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
