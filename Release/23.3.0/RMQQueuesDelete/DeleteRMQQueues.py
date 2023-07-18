@@ -1,14 +1,24 @@
 import pika
 import csv
 import sys
-print("Environment:", sys.argv[1])
-print("Host:", sys.argv[2])
-print("User:", sys.argv[3])
-print("Password:", sys.argv[4])
-
+dict = {
+        'localhost': 'localhost',
+        'dev1': 'rabbitmq-nlb.io.dev1.velocify.net', 
+        'dev2': 'rabbitmq-nlb.io.dev2.velocify.net',
+        'qa': 'rabbitmq-nlb.io.qa.velocify.net',
+        'peg': 'rabbitmq-nlb.io.peg.velocify.net',
+        'stg':'rabbitmq-nlb.io.stg.velocify.com',
+        'stg2':'p-rabbitmq-nlb.io.stg.velocify.com',
+        'prod':'rabbitmq-nlb.io.prod.velocify.com',
+        'prod2':'p-rabbitmq-nlb.io.prod.velocify.com'
+}
+env = sys.argv[1]
+host = dict[env]
 print("Queues Deletion Started")
-credentials = pika.PlainCredentials(sys.argv[3], sys.argv[4])
-parameters = pika.ConnectionParameters(sys.argv[2], 5672, "/", credentials)
+print("Environment:", env)
+print("Host:", host)
+credentials = pika.PlainCredentials('DialIq', sys.argv[2])
+parameters = pika.ConnectionParameters(host, 5672, "/", credentials)
 connection = pika.BlockingConnection(parameters)
 with open("QueuesList.csv") as queueList:
     reader_obj = csv.reader(queueList)
