@@ -1,6 +1,6 @@
 def tempImageName = "release_automation_task_${UUID.randomUUID()}"
 pipeline {
-    agent { label = "linux" }
+    agent { label "linux" }
 
     stages {
         stage('Setup parameters') {
@@ -59,9 +59,7 @@ pipeline {
 				    sh "docker run \"${tempImageName}\" ${params.ENVIRONMENT}"
 				}
 			}
-			
-		}
-                
+		} 
             }
         }
         stage('Clean Docker') {
