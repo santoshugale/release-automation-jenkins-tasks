@@ -40,7 +40,7 @@ pipeline {
         stage('Build Docker') {
             steps {
                 dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
-                   sh "docker build . -t \"${tempImageName}\""
+                   sh "sudo docker build . -t \"${tempImageName}\""
                 }
             }
         }
@@ -52,11 +52,11 @@ pipeline {
 		script {
 			if (params.STEPNAME == 'RMQQueuesDelete') {
 				dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
-				    sh "docker run \"${tempImageName}\" ${params.ENVIRONMENT} ${RMQ_CREDS_USR} ${RMQ_CREDS_PSW}"
+				    sh "sudo docker run \"${tempImageName}\" ${params.ENVIRONMENT} ${RMQ_CREDS_USR} ${RMQ_CREDS_PSW}"
 				}
 			} else {
 				dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
-				    sh "docker run \"${tempImageName}\" ${params.ENVIRONMENT}"
+				    sh "sudo docker run \"${tempImageName}\" ${params.ENVIRONMENT}"
 				}
 			}
 		} 
@@ -65,8 +65,8 @@ pipeline {
         stage('Clean Docker') {
             steps {
 		script {
-			if (sh(script:"docker images -q \"${tempImageName}\" 2> \$null", returnStdout:true)) {
-				def stdout = sh(script:"docker image rm \"${tempImageName}\" --force 2>&1", returnStdout:true)
+			if (sh(script:"sudo docker images -q \"${tempImageName}\" 2> \$null", returnStdout:true)) {
+				def stdout = sh(script:"sudo docker image rm \"${tempImageName}\" --force 2>&1", returnStdout:true)
 				echo "Local docker image cleanup output: ${stdout}"
 			} else {
 				echo "Image not found: \"${tempImageName}\""
