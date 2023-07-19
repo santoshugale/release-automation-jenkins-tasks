@@ -16,7 +16,7 @@ host = dict[env]
 print("Queues Deletion Started")
 print("Environment:", env)
 print("Host:", host)
-credentials = pika.PlainCredentials('DialIq', sys.argv[2])
+credentials = pika.PlainCredentials(sys.argv[2], sys.argv[3])
 parameters = pika.ConnectionParameters(host, 5672, "/", credentials)
 connection = pika.BlockingConnection(parameters)
 with open("QueuesList.csv") as queueList:
