@@ -45,12 +45,12 @@ pipeline {
             }
         }
         stage('Run Docker') {
+	    environment {
+	        RMQ_CREDS = credentials("rmq-${params.ENVIRONMENT}-credentials")
+	    }
             steps {
 		script {
 			if (params.STEPNAME == 'RMQQueuesDelete') {
-				environment {
-				    RMQ_CREDS = credentials("rmq-${params.ENVIRONMENT}-credentials")
-				}
 				dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
 				    sh "docker run \"${tempImageName}\" ${params.ENVIRONMENT} ${RMQ_CREDS_USR} ${RMQ_CREDS_PSW}"
 				}
