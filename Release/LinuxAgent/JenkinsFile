@@ -25,7 +25,7 @@ pipeline {
         stage('Validation') {
             steps {
                 script {
-                    def filePath = "${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME + "\\Dockerfile"
+                    def filePath = "${WORKSPACE}/Release/" + params.RELEASE + "/" + params.STEPNAME + "/Dockerfile"
                     if (fileExists(filePath)) {
                         echo "Dockerfile exists in " + filePath
                     }
@@ -39,7 +39,7 @@ pipeline {
         }
         stage('Build Docker') {
             steps {
-                dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
+                dir("${WORKSPACE}/Release/" + params.RELEASE + "/" + params.STEPNAME) {
                    sh "sudo docker build . -t \"${tempImageName}\""
                 }
             }
@@ -51,11 +51,11 @@ pipeline {
             steps {
 		script {
 			if (params.STEPNAME == 'RMQQueuesDelete') {
-				dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
+				dir("${WORKSPACE}/Release/" + params.RELEASE + "/" + params.STEPNAME) {
 				    sh "sudo docker run \"${tempImageName}\" ${params.ENVIRONMENT} ${RMQ_CREDS_USR} ${RMQ_CREDS_PSW}"
 				}
 			} else {
-				dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
+				dir("${WORKSPACE}/Release/" + params.RELEASE + "/" + params.STEPNAME) {
 				    sh "sudo docker run \"${tempImageName}\" ${params.ENVIRONMENT}"
 				}
 			}
