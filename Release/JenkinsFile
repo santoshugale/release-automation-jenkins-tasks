@@ -53,7 +53,7 @@ pipeline {
 				}
 				dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
 				    /* Use single quote to avoid diplaying the password in jenkings output - https://www.jenkins.io/doc/book/pipeline/jenkinsfile/#string-interpolation */
-				    bat "docker run --rm \"${tempImageName}\" ${params.ENVIRONMENT} ${RMQ_CREDS_USR} ${RMQ_CREDS_PSW}"
+				    bat "docker run --rm \"${tempImageName}\" ${params.ENVIRONMENT} $RMQ_CREDS_USR $RMQ_CREDS_PSW"
 				}
 			} else {
 				dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
