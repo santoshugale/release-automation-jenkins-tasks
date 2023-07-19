@@ -10,8 +10,7 @@ pipeline {
                         parameters([
                             choice(choices: ['dev1', 'dev2', 'qa', 'peg', 'stg2', 'stg', 'prod2', 'prod'], name: 'ENVIRONMENT'),
                             string( defaultValue: '23.3.0',name: 'RELEASE'),
-                            string(defaultValue: 'RMQQueuesDelete', name: 'STEPNAME'),
-                            password(defaultValue: 'guest', name: 'RMQPASSWORD', description: 'Enter a rabbitmq password to delete queue')
+                            string(defaultValue: 'RMQQueuesDelete', name: 'STEPNAME')
                         ])
                     ])
                 }
@@ -49,8 +48,11 @@ pipeline {
             steps {
 		script {
 			if (params.STEPNAME == 'RMQQueuesDelete') {
+				environment {
+				    RMQ_CREDS = credentials("rmq-${params.ENVIRONMENT}-credentials")
+				}
 				dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
-				    sh "docker run \"${tempImageName}\" ${params.ENVIRONMENT} ${params.RMQPASSWORD}"
+				    sh "docker run \"${tempImageName}\" ${params.ENVIRONMENT} ${RMQ_CREDS_USR} ${RMQ_CREDS_PSW}"
 				}
 			} else {
 				dir("${WORKSPACE}\\Release\\" + params.RELEASE + "\\" + params.STEPNAME) {
